@@ -38,40 +38,16 @@
     <script src="https://cdn.jsdelivr.net/gh/jcubic/jquery.terminal@devel/js/jquery.terminal.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/figlet/lib/figlet.js"></script>
     <script src="game.js"></script>
+    <script src="formatters.js"></script>
     <script>
      var term;
      var game;
-     $.terminal.defaults.allowedAttributes.push('style');
-     var light_style = [
-         'width:2ch',
-         '--background:#ccc',
-         '--color:rgba(0,0,0,0.99)',
-         'text-align:center'
-     ].join(';');
-     $.terminal.defaults.formatters.push([
-         /<l>([^>]+)<\/l>/g, '[[;;;;;{"style": "' + light_style + '"}]$1]'
-     ]);
-     var dark_style = [
-         'width:2ch',
-         'text-align:center',
-         '--background:black',
-         '--color:rgba(204,204,204,0.99)'
-     ].join(';');
-     $.terminal.defaults.formatters.push([
-         /<d>([^>]+)<\/d>/g, '[[;;;;;{"style": "' + dark_style + '"}]$1]'
-     ]);
-     var labels = [
-         'width:2ch',
-         'text-align:center',
-         '--color:rgba(85,85,85,0.995)'
-     ].join(';');
-     $.terminal.defaults.formatters.push([
-         /([1-8a-h])/g, '[[;;;;;{"style":"' + labels + '"}]$1]', {echo: true}
-     ]);
      figlet.defaults({fontPath: 'https://unpkg.com/figlet@1.4.0/fonts/'});
      figlet.preloadFonts(["Slant"], ready);
-
+     
      var term;
+     
+     var copyright = '<nop>Copyright (C) </nop><a href="https://jcubic.pl">Jakub T. Jankiewicz</a> <nop>version 0.1.0</nop>';
 
      function ready() {
          $(function() {
@@ -89,7 +65,11 @@
                  //echoCommand: false,
                  greetings: false,
                  onInit: function() {
-                     this.echo(() => render('Terminal Chess', 'Slant'));
+                     this.echo(() => [
+                        render('Terminal Chess', 'Slant'),
+                        copyright,
+                        ''
+                      ].join('\n'));
                  },
                  checkArity: false,
                  renderHandler: function(obj, options) {
